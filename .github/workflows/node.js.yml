@@ -56,9 +56,11 @@ jobs:
   report:
     runs-on: ubuntu-latest
     needs: [build]
+    container: 
+      image: alpine:latest
     steps:
       - name: Report
-        run: echo "${{ toJson(github) }}"
+        run: cat /etc/*ease && echo "${{ toJson(github) }}"
 
 
 
