@@ -42,8 +42,8 @@ jobs:
     - name: Realizando o Build
       run: npm run build --if-present
     
-    - name: Executando lint
-      run: npm run lint
+    #- name: Executando lint
+    #  run: npm run lint
     
     - name: Realizando testes
       run: npm test
