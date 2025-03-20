@@ -78,6 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build]
     steps:
+      - uses: actions/checkout@v4
       - name: PR Check
         uses: ./.github/actions/prNumber
 
