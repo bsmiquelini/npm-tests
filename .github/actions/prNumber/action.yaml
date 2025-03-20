@@ -1,6 +1,18 @@
-name: Verifica PR
-description: Verifica se o PR foi feito a partir de uma branch de feature
-
+name: Deploy AWS Bucket
+description: Deploy AWS Bucket
+inputs:
+  bucket-name:
+    description: 'Bucket Name'
+    required: true
+    default: 'feature'
+  region:
+    description: 'Region'
+    required: true
+    default: 'us-east-1'
+  dist-path:
+    description: 'Dist Path'
+    required: true
+    default: 'dist'
 runs:
   using: "node16"
   main: main.js
