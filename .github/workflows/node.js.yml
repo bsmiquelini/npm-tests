@@ -69,6 +69,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: dist-artifact
+          path: ${{ env.DIST_PATH }}
       - name: Deploy dist para o AWS S3
         uses: ./.github/actions/deployAwsS3
         with:
