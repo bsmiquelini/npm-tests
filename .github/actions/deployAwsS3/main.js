@@ -9,6 +9,10 @@ function Deploy() {
   const region = core.getInput('region');
   
   // Deploy to S3
+  exec.exec(`echo Listando arquivos do diretório ${distPath}`);
+
+  exec.exec(`ls -la ${distPath}`);
+
   exec.exec(`echo aws s3 sync ${distPath} s3://${bucketName} --recursive --region ${region}`);
   core.notice('Deploy do path ' + distPath + ' para o bucket ' + bucketName + ' na região ' + region);
 }

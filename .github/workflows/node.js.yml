@@ -15,7 +15,7 @@ env:
   MONGO_PASS_TEST: ${{ vars.MONGO_PASS_TEST || 'teste' }}
   REGION: ${{ vars.REGION || 'us-east-1' }}
   DIST_PATH: ${{ vars.DIST_PATH || 'dist/' }}
-  BUCKET_NAME: ${{ vars.BUCKET_NAME || 's3-test' }}
+  BUCKET_NAME: ${{ vars.BUCKET_NAME || '' }}
   
 jobs:
   build:
@@ -69,7 +69,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-dist
-      - name: PR Check
+      - name: Deploy dist para o AWS S3
         uses: ./.github/actions/deployAwsS3
         with:
           region: ${{ env.REGION }}
