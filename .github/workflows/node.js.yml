@@ -57,8 +57,8 @@ jobs:
     - name: Publicando DIST
       uses: actions/upload-artifact@v4
       with:
-         name: node-dist
-         path: dist/
+         name: ${{ env.DIST_PATH }}
+         path: ${{ env.DIST_PATH }}
   
   deploy:
     runs-on: ubuntu-latest
@@ -68,7 +68,7 @@ jobs:
       - name: Download DIST
         uses: actions/download-artifact@v4
         with:
-          name: node-dist
+          name: ${{ env.DIST_PATH }}
       - name: Deploy dist para o AWS S3
         uses: ./.github/actions/deployAwsS3
         with:
