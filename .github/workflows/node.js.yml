@@ -11,6 +11,8 @@ on:
 
 env:
   NODE_VERSION: 22.x
+  MONGO_USER: teste
+  MONGO_PASS_TEST: teste
   
 jobs:
   build:
@@ -58,6 +60,16 @@ jobs:
     needs: [build]
     container: 
       image: alpine:latest
+    services:
+      nginx: 
+        image: nginx
+      mongodb:
+        image: mongo
+        env: 
+          MONGO_INITDB_ROOT__USERNAME: ${{ env.MONGO_PASS_TEST }}
+          MONGO_INITDB_ROOT__PASSWORD: ${{ env.MONGO_PASS_TEST }}
+        ports:
+          - 27017:27017
     steps:
       - name: Report
         run: cat /etc/*ease && echo "${{ toJson(github) }}"
