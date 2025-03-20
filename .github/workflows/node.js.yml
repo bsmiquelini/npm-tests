@@ -73,7 +73,7 @@ jobs:
           - 27017:27017
     steps:
       - name: Report
-        run: cat /etc/*ease && echo "${{ toJson(github) }}"
+        run: echo "${{ needs.build.result}}"
 
 
 
