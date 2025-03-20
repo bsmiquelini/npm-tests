@@ -39,7 +39,7 @@ jobs:
     #    path: node_modules
     #    key: deps-npm-'${{ hashFiles('**/package-lock.json') }}'
     - name: Instalação de Dependencias
-      if: steps.cache.outputs.cache-hit == 'false'
+      #if: steps.cache.outputs.cache-hit == 'false'
       run: echo "${{ steps.cache.outputs.cache-hit }}" && npm ci
 
     - name: Realizando o Build
@@ -73,7 +73,7 @@ jobs:
           - 27017:27017
     steps:
       - name: Report
-        run: echo "${{ needs.build.result}}"
+        run: echo "${{ needs.build.result }}"
 
 
 
