@@ -15,7 +15,6 @@ env:
   MONGO_PASS_TEST: ${{ vars.MONGO_PASS_TEST || 'teste' }}
   REGION: ${{ vars.REGION || 'us-east-1' }}
   DIST_PATH: ${{ vars.DIST_PATH || 'dist/' }}
-  DIST_ARTIFACT: ${{ env.DIST_PATH && env.DIST_PATH.endsWith('/') ? env.DIST_PATH.slice(0, -1) : env.DIST_PATH }}
   BUCKET_NAME: ${{ vars.BUCKET_NAME || 's3-teste' }}
   
 jobs:
@@ -58,7 +57,7 @@ jobs:
     - name: Publicando DIST
       uses: actions/upload-artifact@v4
       with:
-         name: ${{ env.DIST_ARTIFACT }}
+         name: dist-artifact
          path: ${{ env.DIST_PATH }}
   
   deploy:
@@ -69,7 +68,7 @@ jobs:
       - name: Download DIST
         uses: actions/download-artifact@v4
         with:
-          name: ${{ env.DIST_ARTIFACT }}
+          name: dist-artifact
       - name: Deploy dist para o AWS S3
         uses: ./.github/actions/deployAwsS3
         with:
