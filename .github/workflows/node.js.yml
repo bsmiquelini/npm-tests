@@ -31,13 +31,7 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
         cache: npm
-    
-    - name: Verifica outputs 
-      run: |
-        echo "Cache Hit: ${{ steps.cache.outputs.cache-hit }}"
-        echo "Cache Key: ${{ steps.cache.outputs.cache-key }}"
-        echo "Cache Restore: ${{ steps.cache.outputs.cache-restore }}"
-        
+
     #- name: Cache
     #  id: cache
     #  uses: actions/cache@v3
@@ -45,7 +39,7 @@ jobs:
     #    path: node_modules
     #    key: deps-npm-'${{ hashFiles('**/package-lock.json') }}'
     - name: Instalação de Dependencias
-      #if: steps.cache.outputs.cache-hit != 'failure'
+      if: steps.cache.outputs.cache-hit != 'failure'
       run: npm ci
 
     - name: Realizando o Build
