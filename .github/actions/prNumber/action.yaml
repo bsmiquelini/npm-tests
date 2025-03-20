@@ -1,0 +1,6 @@
+name: Verifica PR
+description: Verifica se o PR foi feito a partir de uma branch de feature
+
+runs:
+  using: "node16"
+  main: main.js
