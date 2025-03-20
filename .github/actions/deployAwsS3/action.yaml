@@ -13,6 +13,9 @@ inputs:
     description: 'Dist Path'
     required: true
     default: 'dist'
+outputs:
+  site-url:
+    description: 'URL do site S3'
 runs:
   using: "node16"
   main: main.js

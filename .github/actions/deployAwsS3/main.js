@@ -15,6 +15,11 @@ function Deploy() {
 
   exec.exec(`echo aws s3 sync ${distPath} s3://${bucketName} --recursive --region ${region}`);
   core.notice('Deploy do path ' + distPath + ' para o bucket ' + bucketName + ' na região ' + region);
+
+  const webSiteUrl = `http://${bucketName}.s3-website-${region}.amazonaws.com`;
+  core.setOutput('site-url', webSiteUrl); 
+  core.notice('URL: ' + webSiteUrl);
+
 }
 
 Deploy();
