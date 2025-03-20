@@ -85,6 +85,9 @@ jobs:
   report:
     runs-on: ubuntu-latest
     needs: [deploy]
+    env:
+      result: ${{ needs.build.result }}
+      site-url: ${{ needs.deploy.outputs.site-url }}
     container: 
       image: alpine:latest
     services:
@@ -100,8 +103,8 @@ jobs:
     steps:
       - name: Report
         run: |
-          echo "Status Deploy: ${{ needs.build.result }}"
-          echo "URL do site: ${{ needs.deploy.outputs.site-url }}"
+          echo "Status Deploy: ${{ env.result }}"
+          echo "URL do site: ${{ env.site-url }}"
 
 
 
