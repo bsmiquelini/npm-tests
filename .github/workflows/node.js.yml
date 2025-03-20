@@ -31,6 +31,12 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
         cache: npm
     
+    - name: Verifica outputs 
+      run: |
+        echo "Cache Hit: ${{ steps.cache.outputs.cache-hit }}"
+        echo "Cache Key: ${{ steps.cache.outputs.cache-key }}"
+        echo "Cache Restore: ${{ steps.cache.outputs.cache-restore
+        
     #- name: Cache
     #  id: cache
     #  uses: actions/cache@v3
