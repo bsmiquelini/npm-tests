@@ -12,6 +12,6 @@ RUN apk add --no-cache bash curl jq
 
 WORKDIR //github/workspace
 COPY entrypoint.sh ./entrypoint.sh
-RUN chmod +x ./entrypoint.sh
+RUN ls -lart && chmod +x ./entrypoint.sh
 
 ENTRYPOINT ["./entrypoint.sh"]
