@@ -10,7 +10,7 @@ ENV AWS_DIST_PATH=${AWS_DIST_PATH}
 
 RUN apk add --no-cache bash curl jq
 
-WORKDIR /home/run 
+WORKDIR //github/workspace
 COPY entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 
