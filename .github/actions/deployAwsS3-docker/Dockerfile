@@ -10,8 +10,8 @@ ENV AWS_DIST_PATH=${AWS_DIST_PATH}
 
 RUN apk add --no-cache bash curl jq
 
-WORKDIR //github/workspace
+WORKDIR /github/workspace
 COPY entrypoint.sh ./entrypoint.sh
-RUN ls -lart && chmod +x ./entrypoint.sh
+RUN ls -lart && pwd && chmod +x ./entrypoint.sh
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["/github/workspace/entrypoint.sh"]
