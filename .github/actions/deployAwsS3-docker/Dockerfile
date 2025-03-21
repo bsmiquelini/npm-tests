@@ -1,14 +1,17 @@
 FROM alpine:3.10
 
-ENV AWS_REGION=${AWS_REGION
+ARG AWS_REGION AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_BUCKET_NAME AWS_DIST_PATH
+
+ENV AWS_REGION=${AWS_REGION}
 ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
 ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 ENV AWS_BUCKET_NAME=${AWS_BUCKET_NAME}
 ENV AWS_DIST_PATH=${AWS_DIST_PATH}
 
-
 RUN apk add --no-cache bash curl jq
 
-COPY entrypoint.sh /entrypoint.sh
+WORKDIR /home/run 
+COPY entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
