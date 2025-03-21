@@ -1,0 +1,7 @@
+name: Deploy s3 Dockerfile
+description: Deploy s3 Dockerfile
+
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
