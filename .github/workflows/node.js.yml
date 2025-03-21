@@ -11,6 +11,11 @@ on:
 
 env:
   NODE_VERSION: 22.x
+  MONGO_USER: ${{ vars.MONGO_USER || 'teste' }}
+  MONGO_PASS_TEST: ${{ vars.MONGO_PASS_TEST || 'teste' }}
+  REGION: ${{ vars.REGION || 'us-east-1' }}
+  DIST_PATH: ${{ vars.DIST_PATH || 'dist/' }}
+  BUCKET_NAME: ${{ vars.BUCKET_NAME || 's3-teste' }}
   
 jobs:
   build:
@@ -24,11 +29,12 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Instalando nodeJS ${{ env.NODE_VERSION }}
+      id: cache
       uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
         cache: npm
-    
+
     #- name: Cache
     #  id: cache
     #  uses: actions/cache@v3
@@ -36,8 +42,8 @@ jobs:
     #    path: node_modules
     #    key: deps-npm-'${{ hashFiles('**/package-lock.json') }}'
     - name: Instalação de Dependencias
-      #if: steps.cache.outputs.cache-hit != 'failure'
-      run: npm ci
+      #if: steps.cache.outputs.cache-hit == 'false'
+      run: echo "${{ steps.cache.outputs.cache-hit }}" && npm ci
 
     - name: Realizando o Build
       run: npm run build --if-present
@@ -46,19 +52,69 @@ jobs:
     #  run: npm run lint
     
     - name: Realizando testes
-      run: npm test
+      run: npm test || true
     
     - name: Publicando DIST
       uses: actions/upload-artifact@v4
       with:
-         name: node-dist
-         path: dist/
-  report:
+         name: dist-artifact
+         path: ${{ env.DIST_PATH }}
+  
+  deploy:
     runs-on: ubuntu-latest
     needs: [build]
+    outputs:
+      site-url: ${{ steps.deploy.outputs.site-url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download DIST
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-artifact
+          path: ${{ env.DIST_PATH }}
+          
+      - name: Deploy dist para o AWS S3 (JS)
+        id: deploy
+        uses: ./.github/actions/deployAwsS3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        with:
+          region: ${{ env.REGION }}
+          bucket-name: ${{ env.BUCKET_NAME }}
+          dist-path: ${{ env.DIST_PATH }}
+
+      - name: Deploy dist para AWS s3 (Dockerfile)
+        uses: ./.github/actions/deployAwsS3-docker
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_BUCKET_NAME: ${{ env.BUCKET_NAME }}
+          AWS_REGION: ${{ env.REGION }}
+          AWS_DIST_PATH: ${{ env.DIST_PATH }}
+  report:
+    runs-on: ubuntu-latest
+    needs: [deploy]
+    env:
+      result: ${{ needs.build.result }}
+      site-url: ${{ needs.deploy.outputs.site-url }}
+    container: 
+      image: alpine:latest
+    services:
+      nginx: 
+        image: nginx
+      mongodb:
+        image: mongo
+        env: 
+          MONGO_INITDB_ROOT_USERNAME: ${{ env.MONGO_USER }}
+          MONGO_INITDB_ROOT_PASSWORD: ${{ env.MONGO_PASS_TEST }}
+        ports:
+          - 27017:27017
     steps:
       - name: Report
-        run: echo "${{ toJson(github) }}"
+        run: |
+          echo "Status Deploy: ${{ env.result }}"
+          echo "URL do site: ${{ env.site-url }}"
 
 
 

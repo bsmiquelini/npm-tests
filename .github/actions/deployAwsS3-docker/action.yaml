@@ -1,0 +1,14 @@
+name: Deploy s3 Dockerfile
+description: Deploy s3 Dockerfile
+
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+    - -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+    - -e AWS_BUCKET_NAME=$AWS_BUCKET_NAME
+    - -e AWS_REGION=$AWS_REGION
+    - -e AWS_DIST_PATH=$AWS_DIST_PATH
+  
